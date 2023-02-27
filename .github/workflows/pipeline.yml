@@ -1,0 +1,42 @@
+name: AWS CDK stack
+
+on:
+  push:
+    branches: ['main']
+    paths-ignore:
+      - 'README.md'
+
+jobs:
+  aws_cdk:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.9"]
+
+    steps:
+      -  uses: actions/checkout@v3
+
+      - name: Configure AWS Credentials
+        uses: aws-action/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+
+      - name: Setup Node.js
+        run: 'sudo apt update -y && sudo apt install -y npm nodejs'
+
+      - name: Install AWS CDK binary
+        run: 'sudo npm install -g aws-cdk'
+
+      - name: Install Requirements
+        run: 'pip3 install -r requirements.txt'
+
+      - name: Build lambda layer
+        run: 'cd resources/shortener_app && pip install -r requirements.txt --target ../layers/python/'
+
+      - name: CDK synthesize
+        run: cdk synth
+
+      - name: CDK deploy
+        run: cdk deploy --require-approval never
