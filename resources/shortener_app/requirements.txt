@@ -1,0 +1,5 @@
+fastapi
+uvicorn
+validators
+boto3
+mangum
