@@ -22,9 +22,10 @@ class CdkStack(Stack):
         # The code that defines your stack goes here
         
         custom_domain = os.getenv('CUSTOM_DOMAIN')
-        print(f"CUSTOM DOMAIN: {custom_domain}")
+        print(f"CUSTOM_DOMAIN: {os.getenv('CUSTOM_DOMAIN')}")
         print(f"RUNNER_OS: {os.getenv('RUNNER_OS')}")
         print(f"CDK_DEFAULT_ACCOUNT: {os.getenv('CDK_DEFAULT_ACCOUNT')}")
+
         table = dynamodb.Table(self, "urls",
                                partition_key=dynamodb.Attribute(name="key", type=dynamodb.AttributeType.STRING)
         )
