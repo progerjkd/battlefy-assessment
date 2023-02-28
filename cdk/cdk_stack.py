@@ -1,7 +1,6 @@
 import os
 from aws_cdk import (
     Stack,
-    RemovalPolicy,
     Duration,
     aws_iam as iam,
     aws_apigateway as apigateway,
@@ -10,7 +9,6 @@ from aws_cdk import (
     aws_route53 as route53,
     aws_route53_targets as targets,
     aws_certificatemanager as acm
-
 )
 from constructs import Construct
 
@@ -22,10 +20,6 @@ class CdkStack(Stack):
         # The code that defines your stack goes here
         
         custom_domain = os.getenv('CUSTOM_DOMAIN')
-        print(f"CUSTOM_DOMAIN: {os.getenv('CUSTOM_DOMAIN')}")
-        print(f"RUNNER_OS: {os.getenv('RUNNER_OS')}")
-        print(f"CDK_DEFAULT_ACCOUNT: {os.getenv('CDK_DEFAULT_ACCOUNT')}")
-        print(f"CDK_DEFAULT_REGION: {os.getenv('CDK_DEFAULT_REGION')}")
         
         table = dynamodb.Table(self, "urls",
                                partition_key=dynamodb.Attribute(name="key", type=dynamodb.AttributeType.STRING)
@@ -71,10 +65,6 @@ class CdkStack(Stack):
         )
 
         hosted_zone = route53.HostedZone.from_lookup(self, "HostedZone", domain_name=custom_domain)
-        # hosted_zone = route53.HostedZone(self, "HostedZone", zone_name=custom_domain)
-        # hosted_zone.apply_removal_policy(RemovalPolicy.DESTROY)
-
-
 
         certificate = acm.DnsValidatedCertificate(
             self,
@@ -87,18 +77,16 @@ class CdkStack(Stack):
         api = apigateway.LambdaRestApi(self, "shortener_api",
                                        handler=lambda_function,
                                        proxy=True,
-                                    #    endpoint_types=[apigateway.EndpointType.REGIONAL],
                                        domain_name=apigateway.DomainNameOptions(
                                             domain_name=f"api.{custom_domain}",
                                             certificate=certificate,
                                             security_policy=apigateway.SecurityPolicy.TLS_1_2,
-                                            endpoint_type=apigateway.EndpointType.EDGE
+                                            endpoint_type=apigateway.EndpointType.REGIONAL
                                        )
         )
 
         api.root.add_method("GET")
         api.root.add_method("POST")
-
 
         route53.ARecord(
             self,
