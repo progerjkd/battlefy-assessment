@@ -1,4 +1,6 @@
-Battlefy URL Shortener API
+# Battlefy URL Shortener API
+
+[![AWS CDK stack](https://github.com/progerjkd/battlefy-assessment/actions/workflows/pipeline.yml/badge.svg)](https://github.com/progerjkd/battlefy-assessment/actions/workflows/pipeline.yml)
 
 This is a serverless URL shortener API built using AWS Lambda, API Gateway and DynamoDB.
 The API was built using FastAPI and Python, and it has only two endpoints as shown below:
