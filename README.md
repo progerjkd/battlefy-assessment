@@ -19,7 +19,7 @@ And another endpoint to resolve a given shortlink:
 
 # Architecture
 <p align="center">
-  <img width="70%" src="img/CDK.png" />
+  <img width="90%" src="img/CDK.png" />
 </p>
 
 **Amazon** API Gateway is an AWS service for creating and securing REST APIs at any scale.
