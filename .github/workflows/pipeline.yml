@@ -38,6 +38,9 @@ jobs:
 
       - name: CDK synthesize
         run: cdk synth
-
+        env:
+          CUSTOM_DOMAIN: ${{ env.CUSTOM_DOMAIN }}
+          CDK_DEFAULT_ACCOUNT: ${{ env.CDK_DEFAULT_ACCOUNT }}
+          CDK_DEFAULT_REGION: ${{ env.CDK_DEFAULT_REGION }}
       - name: CDK deploy
         run: cdk deploy --require-approval never
