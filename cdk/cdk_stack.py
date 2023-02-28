@@ -81,7 +81,7 @@ class CdkStack(Stack):
                                             domain_name=f"api.{custom_domain}",
                                             certificate=certificate,
                                             security_policy=apigateway.SecurityPolicy.TLS_1_2,
-                                            endpoint_type=apigateway.EndpointType.REGIONAL
+                                            endpoint_type=apigateway.EndpointType.EDGE
                                        )
         )
 
